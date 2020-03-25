@@ -108,6 +108,9 @@ class SpotifyBot:
         self.log.info("found playlist", self.pl)
 
     def on_message(self, channel, message, dry=False):
+        if channel != self.music_channel:
+            return
+
         urls = find_all_urls(message)
         if len(urls) == 0:
             return
@@ -159,10 +162,7 @@ class SpotifyBot:
             if "title" in info:
                 title = info["title"]
                 self.log.info("title: %s", title)
-                if channel == self.music_channel:
-                    self.try_add_by_search(title, dry)
-                else:
-                    self.log.info("ignoring outside of music channel")
+                self.try_add_by_search(title, dry)
             else:
                 self.log.warn("no title")
 
